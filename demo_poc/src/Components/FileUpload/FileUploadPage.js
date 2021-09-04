@@ -18,6 +18,7 @@ export default function FileUploadPage(){
 		formData.append('File', selectedFile);
 		fetch(
 			'https://freeimage.host/api/1/upload?key=<YOUR_API_KEY>',
+			{mode: "no-cors"},
 			{
 				method: 'POST',
 				body: formData,
@@ -30,6 +31,7 @@ export default function FileUploadPage(){
 			.catch((error) => {
 				console.error('Error:', error);
 			});
+			console.log('data');
 	};
 	return(
    <div>
