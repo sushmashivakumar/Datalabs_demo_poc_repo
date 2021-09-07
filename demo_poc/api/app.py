@@ -1,4 +1,4 @@
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,response,url
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 
@@ -45,7 +45,28 @@ def store_outlet():
     pgcursor.close()
     pgconn.close()
 
+#-----POST the request to frontend-------------
+@app.route("/submit_filter", methods = ['POST','GET'])
+def submit_filters():
+    if request.method == 'POST':
+        if request.is_json:
+            state_name= request.json['state_name']
+            category_name = request.json['category_name']
+            outlet_name = request.json['  outlet_name']
+            create_row_data = {'state_name': str(state_name),'category_name':str(category_name),'outlet_name':str(  outlet_name)}
+            response = request.post(
+            url, data=create_row_data.json.dumps(create_row_data)
+        )
+        print(response)
+        return response.content
+        # db.session.add(submit_data)       
+    else:
+        return {"error": "The request payload is not in JSON format"}
+
+
 #---app to run----
+
+
 if __name__ == '__main__':
     app.run(debug= True)
 
