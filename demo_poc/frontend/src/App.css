@@ -36,7 +36,17 @@
     transform: rotate(360deg);
   }
 } */
-.App {
+/* .App {
   font-family: sans-serif;
   text-align: center;
+} */
+
+body{
+  margin: 0px;
+}
+
+.App{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
