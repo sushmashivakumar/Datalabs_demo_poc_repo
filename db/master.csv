@@ -2,5 +2,3 @@ m_id,m_state,m_city,m_store_outlet,m_item,m_item_category,m_item_price,m_status,
 1,Haryana,Gurgaon,BigBasket,Milk,Dairy,200,Verified,300
 2,Punjab,Chandigarh,BigBasket,Cornflakes,Cereals,190,Verified,250
 3,Bangalore,Basapura,BigBasket,Oats,Cereals,100,Verified,150
-4,Punjab,Amritsar,Grofers,Cornflakes,Biscuits,90,Verified,150
-5,Haryana,Rohtak,Grofers,Oats,Cookie,150,Verified,250

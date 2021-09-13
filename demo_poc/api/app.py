@@ -57,14 +57,14 @@ def item_list():
     pgconn.close()
 
 #-----POST the request to frontend-------------
-@app.route("/submit_filter", methods = ['POST','GET'])
+@app.route("/submit_filter", methods = ['POST', 'GET'])
 def submit_filters():
     if request.method == 'POST':
         if request.is_json:
             state_name= request.json['state_name']
             category_name = request.json['category_name']
-            outlet_name = request.json['outlet_name']
-            create_row_data = {'state_name': str(state_name),'category_name':str(category_name),'outlet_name':str(  outlet_name)}
+            item_name= request.json['item_name']
+            create_row_data = {'state_name': str(state_name),'category_name':str(category_name),'item_name':str(  item_name)}
             response = request.post(
             url_for, data=create_row_data.json.dumps(create_row_data)
         )
@@ -73,6 +73,14 @@ def submit_filters():
         # db.session.add(submit_data)       
     else:
         return {"error": "The request payload is not in JSON format"}
+    # data=request.get_json()
+    # state_name= data['state_name']
+    # category_name = data['category_name']
+    # item_name = data['item_name']
+    # state_id =data['state_id']
+    # return jsonify({'result':'Success', 'state_name' : state_name,'category_name': category_name, 'item_name': item_name, 'state_id':state_id})
+
+
 
 
 #---app to run----
