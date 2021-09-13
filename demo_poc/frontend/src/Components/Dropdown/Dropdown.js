@@ -1,113 +1,137 @@
-import React,{useState} from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import Button from '@material-ui/core/Button';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import Button from "@material-ui/core/Button";
+import { State, CategoryList, CategoryItem } from "../../Mockdata";
 
-const DropDown = ({handleSubmit}) => {
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(2),
+    minWidth: 200,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  InputLabel: {
+    minWidth: 100,
+  },
+}));
 
-const filterOptions = createFilterOptions({
-	matchFrom: 'start',
-	stringify: option => option,
-});
+export default function Dropdown(props) {
+  const { handleFilterData } = props;
+  const classes = useStyles();
+  const [formData, setFormData] = useState({
+    state: "",
+    category: "",
+    item: "",
+  });
 
+  const [categoryitem, setCategoryItem] = useState([]);
 
-//selected values
+  const handleChange = (event) => {
+    const name = event.target.name;
+    if (name === "category") {
+      const filter = CategoryItem.filter(
+        (category) =>
+          category.category.toString() === event.target.value.toString()
+      );
+      setCategoryItem(filter);
+    }
+    setFormData({
+      ...formData,
+      [name]: event.target.value,
+    });
+  };
 
-const [country, setCountry] = useState();
-const [category, setCategory] = useState();
-const [storeName, setstoreName] = useState();
+  const handleSubmit = () => {
+    // console.log('submit', formData)
+    if (
+      formData.state !== "" &&
+      formData.category !== "" &&
+      formData.item !== ""
+    ) {
+      handleFilterData(formData);
+    }
+    // console.log(formData, 'data from')
+  };
 
-const handleChange = (e,key) => {
+  return (
+    <div>
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel
+          htmlFor="outlined-age-native-simple"
+          className={classes.InputLabel}
+        >
+          Select State
+        </InputLabel>
+        <Select
+          native
+          value={formData.state}
+          onChange={handleChange}
+          label="Age"
+          inputProps={{
+            name: "state",
+            id: "outlined-age-native-simple",
+          }}
+        >
+          <option aria-label="None" value="" />
+          {State.map((state) => (
+            <option value={state.id}>{state.state}</option>
+          ))}
+        </Select>
+      </FormControl>
 
-	if(key==='state'){
-		setCountry(e);
-	}
-	if(key==='category'){
-		setCategory(e);
-	}
-	if(key==='store'){
-		setstoreName(e);
-	}
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel htmlFor="outlined-age-native-simple">
+          Select Item Category
+        </InputLabel>
+        <Select
+          native
+          value={formData.category}
+          onChange={handleChange}
+          label="CategoryList"
+          inputProps={{
+            name: "category",
+            id: "outlined-age-native-simple",
+          }}
+        >
+          <option aria-label="None" value="" />
+          {CategoryList.map((clist) => (
+            <option value={clist.id}>{clist.categoryName}</option>
+          ))}
+        </Select>
+      </FormControl>
 
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel htmlFor="outlined-age-native-simple">
+          Select Item List
+        </InputLabel>
+        <Select
+          native
+          value={formData.item}
+          onChange={handleChange}
+          label="Item"
+          inputProps={{
+            name: "item",
+            id: "outlined-age-native-simple",
+          }}
+        >
+          <option aria-label="None" value="" />
+          {categoryitem.map((item) => (
+            <option value={item.id}>{item.itemName}</option>
+          ))}
+        </Select>
+      </FormControl>
 
-    // setSelectedValue(e.value);
-	
-	console.log(e.value, 'data');
-  }
-
-
-
-
-
-
-// Sample options for search box
-const stateCountry = ['Andhra', 'Bihar', 'Karnataka','Tamil Nadu', 'Kerala', 'Telangana',
- 'Maharashtra', 'Punjab','Jammu&Kashmir','West Bengal'];
-
- const itemCategory = ['Dairy', 'Vegetables', 'Grocery','Household Items', 'Others'];
-
- const storeOutlets = ['BigBasket', 'Groofers', 'Freshtohome', 'Amazon', 'Reliance', 'more'];
-return (
-    
-	<div style={{ marginTop: '10px' }}>
-	<h3>Search State</h3>
-	<Autocomplete
-		id="dropdown"
-		value={country}
-		onChange={(e, value)=>handleChange(value, 'state')} 
-		// onChange={(event, value) => {
-		// 	console.log(event, value);
-		//   }}
-		style={{ width: 250 }}
-		freeSolo
-		filterOptions={filterOptions}
-		options={stateCountry}
-		renderInput={(params) => (
-		<TextField {...params}
-			variant="outlined"
-			label="Select State"
-		/>
-		)}
-	/>
-
-<h3>Item Category</h3>
-	<Autocomplete
-	value={category}
-	onChange={(e, value)=>handleChange(value, 'category')} 
-		style={{ width: 250 }}
-		freeSolo
-		filterOptions={filterOptions}
-		options={itemCategory}
-		renderInput={(params) => (
-		<TextField {...params}
-			variant="outlined"
-			label="Select Item Category"
-		/>
-		)}
-	/>
-
-<h3> Select Store Outlets</h3>
-	<Autocomplete
-	value={storeName}
-	onChange={(e, value)=>handleChange(value, 'store')} 
-		style={{ width: 250, marginBottom: 10}}
-		freeSolo
-		filterOptions={filterOptions}
-		options={storeOutlets}
-		renderInput={(params) => (
-		<TextField {...params}
-			variant="outlined"
-			label="Select Store Outlets"
-		/>
-		)}
-	/>
-
-<Button variant="contained" color="primary" onClick={()=>handleSubmit(country,category,storeName)}>
-  Submit
-</Button>
-	</div>
-    
-);
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleSubmit()}
+      >
+        Submit
+      </Button>
+    </div>
+  );
 }
-
-export default DropDown;

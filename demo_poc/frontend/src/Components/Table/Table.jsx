@@ -1,78 +1,262 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import {sampleData} from '../../data';
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import { CategoryItem, City, Brand, ActualData } from "../../Mockdata";
+import { Typography } from "@material-ui/core";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 500,
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
+      width: "25ch",
+    },
   },
-});
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 250,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  InputLabel: {
+    minWidth: 100,
+  },
+}));
 
-
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow(desc, city, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, city, qty, unit, price };
-}
-
-// function subtotal(items) {
-//   return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-// }
-
-// const rows = [
-//   createRow('Milk', 'Bengaluru','Amul', 1.00, 22.00)
-  
-// ];
-
-
-
-export default function SpanningTable() {
+export default function SpanningTable(props) {
+  const { data, getAllDataEvent } = props;
   const classes = useStyles();
+  const [tableData, setTableData] = React.useState({
+    brand: "",
+    city: "",
+    price: "",
+    discount: "",
+    effectiveprice: "",
+    status: "Not Verified",
+  });
 
+  const handleChange = (event) => {
+    const name = event.target.name;
+    setTableData({
+      ...tableData,
+      [name]: event.target.value,
+    });
+  };
+
+  const [cityList, setCityList] = useState([]);
+  const [brandsList, setBrandsList] = useState([]);
+
+  const handleCalculate = () => {
+    if (tableData.price !== "" && tableData.discount !== "") {
+      let discountPercentage = tableData.discount / 100;
+      let totalValue = tableData.price - tableData.price * discountPercentage;
+      const final = { ...tableData, effectiveprice: totalValue };
+      setTableData(final);
+      getAllDataEvent({ ...data, ...final });
+    }
+  };
+
+  const handleInputEvent = (value, key) => {
+    let dt = { ...tableData };
+    if (!isNaN(value)) {
+      if (key === "price") {
+        dt = { ...dt, status: "Verified" };
+      }
+      setTableData({
+        ...dt,
+        [key]: value,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (typeof data !== "undefined" && Object.keys(data).length) {
+      const filterResult = ActualData.find(
+        (d) =>
+          d.state.toString() === data.state.toString() &&
+          d.item.toString() === data.item.toString() &&
+          d.category.toString() === data.category.toString()
+      );
+      setCityList(
+        City.filter((city) => city.state.toString() === data.state.toString())
+      );
+      setBrandsList(
+        Brand.filter(
+          (brandlist) => brandlist.itemId.toString() === data.item.toString()
+        )
+      );
+      if (typeof filterResult !== "undefined") {
+        setTableData({ ...tableData, price: filterResult.price });
+      }
+    }
+  }, [data]);
+
+  console.log(data, "this is data");
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="spanning table">
-        <TableHead>
-          {/* <TableRow>
-            <TableCell align="center" colSpan={3}>
-              Details
-            </TableCell>
-            <TableCell align="right">Price</TableCell>
-          </TableRow> */}
-          <TableRow>
-            <TableCell>Desc</TableCell>
-            <TableCell align="right">City</TableCell>
-            <TableCell align="right">Brand</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Item Price</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sampleData.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.city}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              <TableCell align="right">{row.unit}</TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              
-            </TableRow>
-          ))}
+    <div className={classes.root}>
+      <Grid container spacing={1}>
+        <Grid item xs={4}>
+          <Typography variant="h6" gutterBottom>
+            Item:
+            {typeof data !== "undefined" && Object.keys(data).length
+              ? CategoryItem.find(
+                  (category) => category.id.toString() === data.item.toString()
+                )?.itemName
+              : null}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel
+              htmlFor="outlined-age-native-simple"
+              className={classes.InputLabel}
+            >
+              Select City
+            </InputLabel>
+            <Select
+              native
+              value={tableData.city}
+              onChange={handleChange}
+              label="city"
+              inputProps={{
+                name: "city",
+                id: "outlined-age-native-simple",
+              }}
+            >
+              <option aria-label="None" value="" />
+              {cityList.map((clist) => (
+                <option value={clist.id}>{clist.city}</option>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Select Brand
+              </InputLabel>
+              <Select
+                native
+                value={tableData.brand}
+                onChange={handleChange}
+                label="brand"
+                inputProps={{
+                  name: "brand",
+                  id: "outlined-age-native-simple",
+                }}
+              >
+                <option aria-label="None" value="" />
+                {brandsList.map((clist) => (
+                  <option value={clist.id}>{clist.brand}</option>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <TextField
+              id="price"
+              name="price"
+              label="Item Price"
+              defaultValue={tableData.price}
+              value={tableData.price}
+              onChange={(e) => handleInputEvent(e.target.value, "price")}
+              fullWidth
+              autoComplete="shipping address-line1"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="discount"
+              name="discount"
+              label="Discount"
+              defaultValue={tableData.discount}
+              value={tableData.discount}
+              onChange={(e) => handleInputEvent(e.target.value, "discount")}
+              fullWidth
+              autoComplete="shipping address-line2"
+            />
+            <Grid item xs={12}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleCalculate()}
+            >
+              Calculate
+            </Button>
+            </Grid>
+            
+          
+          </Grid>
+        </Grid>
+        {/* <Grid container spacing={1}>
+          
+        </Grid> */}
+        {/* <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Enter Price
+              </InputLabel>
+              <TextField
+                required
+                id="outlined-required"
+                defaultValue={tableData.price}
+                variant="outlined"
+                value={tableData.price}
+                onChange={(e) => handleInputEvent(e.target.value, "price")}
+              />
+            </FormControl>
+          </Grid>
+        </Grid> */}
+        {/* <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel>Enter Discount</InputLabel>
+              <TextField
+                required
+                id="outlined-required"
+                defaultValue={tableData.discount}
+                variant="outlined"
+                value={tableData.discount}
+                onChange={(e) => handleInputEvent(e.target.value, "discount")}
+              />
 
-         
-        </TableBody>
-      </Table>
-    </TableContainer>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleCalculate()}
+              >
+                Calculate
+              </Button>
+            </FormControl>
+          </Grid>
+        </Grid> */}
+      </Grid>
+
+      <Grid container spacing={1}>
+        <div>
+          <Grid item xs={12}>
+            <Typography variant="h6" gutterBottom>
+              {tableData.effectiveprice !== "" ? (
+                <span>Effecttive Price : {tableData.effectiveprice} </span>
+              ) : null}
+            </Typography>
+          </Grid>
+        </div>
+      </Grid>
+    </div>
   );
 }
