@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -25,6 +25,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { State, City, CategoryList, CategoryItem, Brand } from "./Mockdata";
+// import { Card } from "./Components/Card/Card";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -118,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FullWidthGrid() {
   const classes = useStyles();
+  const [test, setTest] = useState([])
 
   const handleSubmit = (country, category, storeName) => {
     console.log(country, category, storeName, "all data");
@@ -167,6 +169,8 @@ export default function FullWidthGrid() {
       FileSaver.saveAs(data, "Export" + fileExtension);
     }
   };
+ 
+
 
   return (
     <div className={classes.root}>
@@ -226,6 +230,9 @@ export default function FullWidthGrid() {
                 </Grid>
               </Paper>
             </Grid>
+            {/* <Grid>
+              <Card></Card>
+            </Grid> */}
             
           </Grid>
         </main>

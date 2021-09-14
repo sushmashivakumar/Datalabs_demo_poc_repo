@@ -6,7 +6,7 @@ import psycopg2
 app = Flask(__name__)
 
 #-----postgresql connection-----------
-pgconn = psycopg2.connect(host="localhost", port = 5433, database="grocery", user="postgres", password="vb2021")
+pgconn = psycopg2.connect(host="localhost", port = 3333, database="grocery", user="postgres", password="Tin@0212")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 pgcursor = pgconn.cursor()
 db = SQLAlchemy(app)

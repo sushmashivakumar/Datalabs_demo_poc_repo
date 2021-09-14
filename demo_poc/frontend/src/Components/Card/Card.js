@@ -6,11 +6,11 @@ export default function Card(){
     const [test, setTest] = useState([])
 
     useEffect(()=> {
-        fetch('/api').then(response => {
+        fetch('/state').then(response => {
             if(response.ok){
                return response.json() 
             }
-        }).then(data => console.log(data))
+        }).then(data => console.log(data, "backend data"))
     },[])
 
 return(
