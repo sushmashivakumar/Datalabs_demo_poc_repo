@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import Dropdown from '../Dropdown/Dropdown';
  
 
-export default function Card(){
+export default function Backend_test(){
     const [test, setTest] = useState([])
 
     useEffect(()=> {

@@ -11,6 +11,8 @@ import { Typography } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+// import Backend_test from  "../Backend_test/Backend_test";
+import Dropdown from "../Dropdown/Dropdown";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -245,7 +247,7 @@ export default function SpanningTable(props) {
           </Grid>
         </Grid> */}
       </Grid>
-
+             
       <Grid container spacing={1}>
         <div>
           <Grid item xs={12}>
@@ -257,6 +259,10 @@ export default function SpanningTable(props) {
           </Grid>
         </div>
       </Grid>
+     <div>
+     <Dropdown></Dropdown>
+     </div>
     </div>
+   
   );
 }

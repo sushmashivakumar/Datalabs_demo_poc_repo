@@ -25,7 +25,9 @@ import SearchIcon from "@material-ui/icons/Search";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { State, City, CategoryList, CategoryItem, Brand } from "./Mockdata";
-// import { Card } from "./Components/Card/Card";
+import Backend_test from "./Components/Backend_test/Backend_test";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,9 +123,9 @@ export default function FullWidthGrid() {
   const classes = useStyles();
   const [test, setTest] = useState([])
 
-  const handleSubmit = (country, category, storeName) => {
-    console.log(country, category, storeName, "all data");
-  };
+  // const handleSubmit = (country, category, storeName) => {
+  //   console.log(country, category, storeName, "all data");
+  // };
   const [isOpened, setIsOpened] = useState(false);
   const [filterData, setFilterData] = useState({});
   const handleFilterData = (data) => {
@@ -173,16 +175,17 @@ export default function FullWidthGrid() {
 
 
   return (
+
     <div className={classes.root}>
       <AppBar className={classes.appBar}>
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             color="inherit"
             onClick={() => setIsOpened(!isOpened)}
             className={classes.icon}
           >
             {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
-          </IconButton>
+          </IconButton> */}
           <Typography variant="h6" className={classes.title}>
             Datalabs Item POC
           </Typography>
@@ -224,19 +227,22 @@ export default function FullWidthGrid() {
             </Grid>
             <Grid item xs={9} sm={9}>
               <Paper className={classes.paper}>
+      
+             
                 <Tabs filterData={filterData} getAllDataEvent={getAllData} />
+
                 <Grid item xs={3} sm={3}>
                   <button onClick={() => handleExport()}>Export</button>
                 </Grid>
+
               </Paper>
             </Grid>
-            {/* <Grid>
-              <Card></Card>
-            </Grid> */}
-            
+             <Backend_test></Backend_test>
           </Grid>
+        
         </main>
       </div>
+   
       <div className={classes.footer}>
         <Typography variant="h6">Footer</Typography>
       </div>
