@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
-import { State, CategoryList, CategoryItem } from "../../Mockdata";
+import {  CategoryList, CategoryItem } from "../../Mockdata";
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -22,12 +23,19 @@ const useStyles = makeStyles((theme) => ({
 export default function Dropdown(props) {
   const { handleFilterData } = props;
   const classes = useStyles();
-  const [formData, setFormData] = useState({
-    state: "",
-    category: "",
-    item: "",
-  });
-
+  const [formData, setFormData] = useState([]);
+  const [allData,setAllData] = useState([]);
+  
+  useEffect(() => {
+    axios('http://localhost:3000/state')
+    .then(response => {
+    console.log("Backend test",response.data)
+    setAllData(response.data);
+    })
+    .catch(error => {
+    console.log('Error getting fake data: ' + error);
+    })
+    }, []);
   const [categoryitem, setCategoryItem] = useState([]);
 
   const handleChange = (event) => {
@@ -38,6 +46,7 @@ export default function Dropdown(props) {
           category.category.toString() === event.target.value.toString()
       );
       setCategoryItem(filter);
+    
     }
     setFormData({
       ...formData,
@@ -52,7 +61,7 @@ export default function Dropdown(props) {
       formData.category !== "" &&
       formData.item !== ""
     ) {
-      handleFilterData(formData);
+      handleFilterData(allData);
     }
     // console.log(formData, 'data from')
   };
@@ -62,25 +71,45 @@ export default function Dropdown(props) {
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel
           htmlFor="outlined-age-native-simple"
-          className={classes.InputLabel}
-        >
+          className={classes.InputLabel} >
           Select State
         </InputLabel>
-        <Select
+        {/* <Select
           native
-          value={formData.state}
+          value={allData.state}
           onChange={handleChange}
-          label="Age"
+          label="state"
           inputProps={{
-            name: "state",
-            id: "outlined-age-native-simple",
+            state_name: allData[1],
+            state_id: allData[0],
           }}
         >
+          <option aria-label="None" value="" />
+          {allData.state.map((allData) => (
+            <option value={allData.state_name}>{allData.state_name}</option>
+          ))}
+        </Select> */}
+        {/* <Select
+          native
+          // value={allData.map((value,index)=>{
+          //   return(
+          //     <div></div>
+          //   )
+          // })}
+          onChange={handleChange}
+          inputProps={{
+            
+          }}>
           <option aria-label="None" value="" />
           {State.map((state) => (
             <option value={state.id}>{state.state}</option>
           ))}
-        </Select>
+        </Select> */}
+        {/* <div className="options">
+       {
+       allData.map(allData => <div className="option">{allData.state}</div>)
+       }
+        </div> */}
       </FormControl>
 
       <FormControl variant="outlined" className={classes.formControl}>
