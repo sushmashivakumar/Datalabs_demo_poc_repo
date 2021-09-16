@@ -12,7 +12,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 pgcursor = pgconn.cursor()
 db = SQLAlchemy(app)
 @app.route("/")
-
+def index():
+    return "Welcome to Datalab"
 # def index():
 #     return "Choose api"
 #----------api for filters using GET method------------
@@ -28,7 +29,7 @@ def state():
             state_list.append({
                 'state_id':str(state[0]),
                 'state_name':state[1],
-                'state_status':state[2]
+                # 'state_status':state[2]
             })
         print("list",state_list)
     return jsonify({"states":state_list})
@@ -47,7 +48,7 @@ def item_category():
             category_list.append({
                 'category_id':str(ctgry[0]),
                 'category_name':ctgry[1],
-                'category_status':ctgry[2]
+                # 'category_status':ctgry[2]
             })
         print("list",category_list)
        
@@ -76,7 +77,8 @@ def item_list():
            item_list.append({
                 'item_id':str(item[0]),
                 'item_name':item[1],
-                'item_status':item[2]
+                'category_id':str(item[3])
+                # 'item_status':item[2]
             })
         print("list",item_list)
         
@@ -106,7 +108,7 @@ def submit_filters():
     category_name = data['category_name']
     item_name = data['item_name']
     state_id =data['state_id']
-    return jsonify({'result':'Success', 'state_name' : state_name,'category_name': category_name, 'item_name': item_name, 'state_id':state_id})
+    return jsonify({'state_name' : state_name,'category_name': category_name, 'item_name': item_name, 'state_id':state_id})
 
 
 
