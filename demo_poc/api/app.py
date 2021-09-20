@@ -12,7 +12,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 pgcursor = pgconn.cursor()
 db = SQLAlchemy(app)
 @app.route("/")
-
+def index():
+    return "Welcome to Datalab"
 # def index():
 #     return "Choose api"
 #----------api for filters using GET method------------
@@ -107,7 +108,7 @@ def submit_filters():
     category_name = data['category_name']
     item_name = data['item_name']
     state_id =data['state_id']
-    return jsonify({'result':'Success', 'state_name' : state_name,'category_name': category_name, 'item_name': item_name, 'state_id':state_id})
+    return jsonify({'state_name' : state_name,'category_name': category_name, 'item_name': item_name, 'state_id':state_id})
 
 
 

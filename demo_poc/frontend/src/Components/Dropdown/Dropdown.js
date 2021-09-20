@@ -7,7 +7,6 @@ import Button from "@material-ui/core/Button";
 // import { CategoryList, CategoryItem } from "../../Mockdata";
 import axios from "axios";
 
-
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(2),
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dropdown(props) {
-  const { handleFilterData } = props;
+  //const { handleFilterData } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({});
   const [stateData, setStateData] = useState([]);
@@ -224,7 +223,6 @@ export default function Dropdown(props) {
           })}
         </Select>
       </FormControl> 
-
       <Button
         variant="contained"
         color="primary"
@@ -232,6 +230,7 @@ export default function Dropdown(props) {
       >
         Submit
       </Button>
-    </div>
+      </div>
+   
   );
 }

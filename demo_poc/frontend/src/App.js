@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 
 // import Card from './Components/Card/Card';
 import Dropdown from "./Components/Dropdown/Dropdown";
-import Tabs from "./Components/Tabs/Tabs";
+// import Tabs from "./Components/Tabs/Tabs";
 // import layoutUI from './Components/Layout/layout';
 import Drawer from "@material-ui/core/Drawer";
 
@@ -240,7 +240,7 @@ export default function FullWidthGrid() {
               <Paper className={classes.paper}>
       
              
-                <Tabs filterData={filterData} getAllDataEvent={getAllData} />
+                {/* <Tabs filterData={filterData} getAllDataEvent={getAllData} /> */}
 
                 <Grid item xs={3} sm={3}>
                   <button onClick={() => handleExport()}>Export to DB</button>
