@@ -28,7 +28,7 @@ def state():
             state_list.append({
                 'state_id':str(state[0]),
                 'state_name':state[1],
-                'state_status':state[2]
+                # 'state_status':state[2]
             })
         print("list",state_list)
     return jsonify({"states":state_list})
@@ -47,7 +47,7 @@ def item_category():
             category_list.append({
                 'category_id':str(ctgry[0]),
                 'category_name':ctgry[1],
-                'category_status':ctgry[2]
+                # 'category_status':ctgry[2]
             })
         print("list",category_list)
        
@@ -76,7 +76,8 @@ def item_list():
            item_list.append({
                 'item_id':str(item[0]),
                 'item_name':item[1],
-                'item_status':item[2]
+                'category_id':str(item[3])
+                # 'item_status':item[2]
             })
         print("list",item_list)
         

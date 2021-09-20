@@ -19,13 +19,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-// import layoutPart from './Components/Layout/layout';
 
-// import App from '../../src/Components/Dropdown/Dropdown';
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { State, City, CategoryList, CategoryItem, Brand } from "./Mockdata";
-import Backend_test from "./Components/Backend_test/Backend_test";
+import axios from "axios";
 
 
 
@@ -129,8 +127,20 @@ export default function FullWidthGrid() {
   const [isOpened, setIsOpened] = useState(false);
   const [filterData, setFilterData] = useState({});
   const handleFilterData = (data) => {
+    axios.post("http://localhost:3000/submit_filter", data).then(
+      (response) => {
+          var result = response.data;
+          console.log(result, "this is result");
+      },
+      (error) => {
+          console.log(error);
+      }
+  );
     setFilterData(data);
+    console.log(data, "this is filtered data")
   };
+
+
   const [alldata, setAllData] = useState({});
   const getAllData = (data) => {
     setAllData(data);
@@ -179,14 +189,14 @@ export default function FullWidthGrid() {
     <div className={classes.root}>
       <AppBar className={classes.appBar}>
         <Toolbar>
-          {/* <IconButton
+          <IconButton
             color="inherit"
             onClick={() => setIsOpened(!isOpened)}
             className={classes.icon}
           >
             {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
-          </IconButton> */}
-          <Typography variant="h6" className={classes.title}>
+          </IconButton>
+          <Typography variant="h6" component={'h6'}className={classes.title}>
             Datalabs Item POC
           </Typography>
           <div className={classes.search}>
@@ -222,6 +232,7 @@ export default function FullWidthGrid() {
           <Grid container spacing={6}>
             <Grid item xs={3} sm={3}>
               <Paper className={classes.paper}>
+                
                 <Dropdown handleFilterData={handleFilterData} />
               </Paper>
             </Grid>
@@ -232,19 +243,19 @@ export default function FullWidthGrid() {
                 <Tabs filterData={filterData} getAllDataEvent={getAllData} />
 
                 <Grid item xs={3} sm={3}>
-                  <button onClick={() => handleExport()}>Export</button>
+                  <button onClick={() => handleExport()}>Export to DB</button>
                 </Grid>
 
               </Paper>
             </Grid>
-             <Backend_test></Backend_test>
+             {/* <Backend_test></Backend_test> */}
           </Grid>
         
         </main>
       </div>
    
       <div className={classes.footer}>
-        <Typography variant="h6">Footer</Typography>
+        <Typography variant="h6" component={'h6'}>Footer</Typography>
       </div>
     </div>
   );

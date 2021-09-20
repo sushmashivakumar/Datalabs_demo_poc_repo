@@ -52,7 +52,7 @@ export const CategoryList = [
   },
   {
     id: 2,
-    categoryName: "Cerals",
+    categoryName: "Cereals",
   },
   {
     id: 3,

@@ -4,14 +4,14 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
-import {  CategoryList, CategoryItem } from "../../Mockdata";
-import axios from 'axios';
+// import { CategoryList, CategoryItem } from "../../Mockdata";
+import axios from "axios";
 
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(2),
-    minWidth: 200,
+    width: 200,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -19,119 +19,188 @@ const useStyles = makeStyles((theme) => ({
   InputLabel: {
     minWidth: 100,
   },
+  
 }));
 
 export default function Dropdown(props) {
   const { handleFilterData } = props;
   const classes = useStyles();
-  const [formData, setFormData] = useState([]);
-  const [allData,setAllData] = useState([]);
+  const [formData, setFormData] = useState({});
+  const [stateData, setStateData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+  const [itemListData, setItemListData] = useState([]);
+
+  // handle change states
+  const [selectedState, setSelectedState] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedItemList, setSelectedItemList] = useState('');
+  const [filteredItemsData, setFilteredItemsData] = useState([]);
+
   
+
+
+  //useEffect for state
+
   useEffect(() => {
-    axios('http://localhost:3000/state')
+    axios("http://localhost:3000/state")
+      .then((response) => {
+        console.log("Backend test", response.data);
+        let finalData = response.data.states.map(item=>item)
+        console.log(finalData, "this is final")
+        setStateData(finalData);
+      })
+      .catch((error) => {
+        console.log("Error getting fake data: " + error);
+      });
+  }, []);
+
+  //useEffect for item category
+
+  useEffect(() => {
+    axios('http://localhost:3000/item_category')
     .then(response => {
-    console.log("Backend test",response.data)
-    setAllData(response.data);
+    console.log("Backend test category",response.data);
+    let itemData = response.data.item_category.map(item=>item)
+    setCategoryData(itemData);
     })
     .catch(error => {
     console.log('Error getting fake data: ' + error);
     })
     }, []);
-  const [categoryitem, setCategoryItem] = useState([]);
+  
+   //useEffect for item list
+  
+    useEffect(() => {
+      axios('http://localhost:3000/item_list')
+      .then(response => {
+      console.log("Backend test itemList",response.data)
+      let listData = response.data.item_list.map(item=>item)
+      setItemListData(listData);
+      })
+      .catch(error => {
+      console.log('Error getting fake data: ' + error);
+      })
+      }, []);
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    if (name === "category") {
-      const filter = CategoryItem.filter(
-        (category) =>
-          category.category.toString() === event.target.value.toString()
-      );
-      setCategoryItem(filter);
-    
-    }
-    setFormData({
-      ...formData,
-      [name]: event.target.value,
-    });
-  };
+
+      const handleChange = (event, dropdown) => {
+       
+        // handle change
+
+          if(dropdown === "states"){
+
+            // console.log(selectedState, "this is selected state")
+            setSelectedState(event.target.value)
+                 
+          }
+
+            // const name = event.target.name;
+            if(dropdown === 'item_category'){
+              setSelectedCategory(event.target.value)
+              console.log(event.target.value, 'this is event');
+              // var deep = _.cloneDeep(itemListData);
+              const filterData = itemListData.filter(item_category => {
+                  console.log('filter in');
+                if(item_category.category_id === event.target.value){
+                  console.log('if inside');
+                  return true;
+                }
+                
+              });
+              console.log(filterData, "filtered item list");
+              setFilteredItemsData(filterData)
+              // (event.target.value)
+            }
+          
+            if(dropdown === "item_list"){
+
+              // console.log(selectedState, "this is selected state")
+              setSelectedItemList(event.target.value)
+                   
+            }
+
+            // console.log(selectedState, "this is selected state")
+            
+                 
+          
+
+
+          // const name = event.target.name;
+          // if(name === 'category'){
+          //   const filter = item_list.filter(category => category.category.toString() === event.target.value.toString());
+          //   setCategoryItem(filter)
+          // }
+          // setFormData({
+          //   ...formData,
+          //   [name]: event.target.value,
+          // });
+
+
+
+         
+
+        }
 
   const handleSubmit = () => {
-    // console.log('submit', formData)
+   
     if (
-      formData.state !== "" &&
-      formData.category !== "" &&
-      formData.item !== ""
+      selectedState !== "" &&
+      selectedCategory !== "" &&
+      selectedItemList !== ""
     ) {
-      handleFilterData(allData);
+      handleFilterData({state_id:selectedState, category_id:selectedCategory, item_id:selectedItemList});
     }
-    // console.log(formData, 'data from')
+    console.log( 'data from')
   };
-
+  // console.log(itemListData, 'item list data')
   return (
+    
     <div>
+     
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel
           htmlFor="outlined-age-native-simple"
-          className={classes.InputLabel} >
+          className={classes.InputLabel}
+        >
           Select State
         </InputLabel>
-        {/* <Select
+        <Select
           native
-          value={allData.state}
-          onChange={handleChange}
+          value={selectedState}
+          onChange={(event)=>handleChange(event,"states")}
           label="state"
           inputProps={{
-            state_name: allData[1],
-            state_id: allData[0],
+            // state_name: stateData.length ? stateData[0].state_name : "",
+            // state_id: stateData.length ? stateData[0].state_id : "",
           }}
         >
           <option aria-label="None" value="" />
-          {allData.state.map((allData) => (
-            <option value={allData.state_name}>{allData.state_name}</option>
-          ))}
-        </Select> */}
-        {/* <Select
-          native
-          // value={allData.map((value,index)=>{
-          //   return(
-          //     <div></div>
-          //   )
-          // })}
-          onChange={handleChange}
-          inputProps={{
-            
-          }}>
-          <option aria-label="None" value="" />
-          {State.map((state) => (
-            <option value={state.id}>{state.state}</option>
-          ))}
-        </Select> */}
-        {/* <div className="options">
-       {
-       allData.map(allData => <div className="option">{allData.state}</div>)
-       }
-        </div> */}
-      </FormControl>
-
-      <FormControl variant="outlined" className={classes.formControl}>
+          {stateData?.map((sdata) => {
+           return (<option value={sdata.state_id}>{sdata.state_name}</option>) 
+          })}
+          
+        </Select>
+        </FormControl>
+        <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel htmlFor="outlined-age-native-simple">
           Select Item Category
         </InputLabel>
         <Select
           native
-          value={formData.category}
-          onChange={handleChange}
-          label="CategoryList"
+          value={selectedCategory}
+          onChange={(event)=>handleChange(event,"item_category")}
+          label="category"
           inputProps={{
-            name: "category",
-            id: "outlined-age-native-simple",
+            // category_name:categoryData[0].category_name,
+            // category_id:categoryData[0].category_id
           }}
         >
-          <option aria-label="None" value="" />
-          {CategoryList.map((clist) => (
-            <option value={clist.id}>{clist.categoryName}</option>
-          ))}
+           <option aria-label="None" value="" />
+         {categoryData.map((cdata) => {
+           return (<option value={cdata.category_id}>{cdata.category_name}</option>)
+          })}
         </Select>
+     
       </FormControl>
 
       <FormControl variant="outlined" className={classes.formControl}>
@@ -140,20 +209,21 @@ export default function Dropdown(props) {
         </InputLabel>
         <Select
           native
-          value={formData.item}
-          onChange={handleChange}
+          value={selectedItemList}
+          onChange={(event)=>handleChange(event,"item_list")}
           label="Item"
           inputProps={{
-            name: "item",
-            id: "outlined-age-native-simple",
+            // item_name : itemListData[0].item_name,
+            // item_id: itemListData[0].item_id
           }}
         >
           <option aria-label="None" value="" />
-          {categoryitem.map((item) => (
-            <option value={item.id}>{item.itemName}</option>
-          ))}
+         
+          {filteredItemsData.map((citem) => {
+           return (<option value={citem.item_id}>{citem.item_name}</option>)
+          })}
         </Select>
-      </FormControl>
+      </FormControl> 
 
       <Button
         variant="contained"
