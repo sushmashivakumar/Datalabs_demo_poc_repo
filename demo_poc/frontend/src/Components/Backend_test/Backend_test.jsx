@@ -10,12 +10,12 @@ export default function Backend_test(){
             if(response.ok){
                return response.json() 
             }
-        }).then(data => console.log(data))
+        }).then(data => console.log(data, "backend data"))
     },[])
 
 return(
     <>
-    <Dropdown></Dropdown>
+    {/* <Dropdown></Dropdown> */}
     </>
     )
 }

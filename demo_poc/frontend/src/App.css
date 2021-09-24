@@ -41,7 +41,7 @@
   text-align: center;
 } */
 
-body{
+/* body{
   margin: 0px;
 }
 
@@ -49,4 +49,96 @@ body{
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+} */
+
+body{margin: 0px; padding:0px;}
+*{margin: 0px; padding: 0px;}
+/* ----- Header css -------*/
+.header-pnael{min-height:50px; background:#00c4ff;}
+/*-------- Header css end -------*/
+
+
+/*-------- tabs css -------*/
+.custom-tabs-section{margin: 0px; padding: 0px;}
+.menu-bar-icon{margin: 0px; padding: 0px;}
+.menu-bar-icon > i{font-size: 18px; position: relative; right:-25px; top: 10px; cursor: pointer;}
+.custom-tabs-panel{display: flex; border-bottom: solid 1px #ccc;}
+.custom-tabs-panel > .nav-tabs{margin: 0px; padding:0px 60px; text-transform: capitalize; border-bottom: none;}
+.custom-tabs-panel > .nav-tabs .nav-link{border:none; color: #999;}
+.custom-tabs-panel > .nav-tabs .nav-link.active{border:none; border-bottom: solid 3px rgb(78, 130, 241); color: #555;}
+.custom-tabs-panel > .export-button{display: flex;margin-left: auto;padding: 2px;}
+.custom-tabs-panel > .export-button i{margin-left: 3px;}
+.tabs-body-section{margin: 0px; padding: 0px;}
+.tabs-body-panel{margin: 0px; padding: 0px; display: flex; height:calc(100vh - 95px);}
+.tabs-body-panel .tabs-left-body{flex:1; border-right: solid 1px #ccc;}
+.tabs-body-panel .accordion > .card{padding: 0px; border: none; border-bottom: solid 1px #ccc;
+    border-radius: 0px;}
+.tabs-body-panel .accordion > .card > .card-header{background: none; display: flex; justify-content: space-between;}
+.icon-header i{padding: 0px 5px; cursor: pointer;}
+.tabs-body-panel .tabs-right-body{flex: 1;}
+/*.accordion .card-header:after {font-family: 'FontAwesome'; content: "\f068"; float: right;}
+.accordion .card-header.collapsed:after {content: "\f067";}
+*/
+.collapse-body-panel{margin: 0px; padding: 0px; display: flex;}
+.collapse-body-panel > .my-tools{flex: 2; padding:0px;}
+.collapse-body-panel > .selected-my-tools{flex: 5; padding:0px;}
+.my-tool-header{margin: 0px; padding:5px; background: #3f6ef1; color: #fff; min-height: 45px;
+    display: flex; align-items: center;}
+.my-tool-header > h6{flex: 0 0 94%;}
+.my-tool-header > a > i{display: block; margin-top: -5px;}
+.my-tool-body{margin: 0px; padding:10px 5px; background: #eee; border: solid 1px #ddd; height: calc(100vh - 200px);}
+.my-tool-body > .input-group{justify-content: center; padding: 3px;}
+.my-tool-body > .input-group input{border:solid 1px #ccc; padding:1px 5px; border-top-left-radius: 5px; border-bottom-left-radius: 5px}
+.my-tool-body > .input-group button{box-shadow: none; border: solid 1px #ddd; background: #fff;
+border-left: none; padding: 1px 5px;  border-top-right-radius: 5px; border-bottom-right-radius: 5px}
+.tool-list{
+  margin-top: 50px;
 }
+.recipe{
+  /* margin: 20px 20px 0px 20px; */
+  height: 40px;
+  margin: 0px; padding: 0px; border: solid 1px #ccc;
+  justify-content: flex-start;
+  padding-left: 10px;
+  display: flex; align-items: center;
+  background:#fff;
+  cursor: pointer;
+}
+
+.recipe-selected{
+  /* margin: 20px 20px 0px 20px; */
+  cursor: pointer;
+  height: 40px;
+  margin: 0px; padding: 0px; border: solid 1px #ccc;
+  justify-content: flex-start;
+  padding-left: 10px;
+  display: flex; align-items: center;
+   background: linear-gradient(270deg, rgba(131,58,180,1) 0%, rgba(252,69,69,1) 100%, rgba(253,29,29,1) 100%);
+}
+.my-tool-section{margin: 0px; padding: 0px;}
+.my-tool-section > .my-tool-body{background: #fff; border-left: none;}
+.my-tool-section > .my-tool-body > button{margin-bottom: 20px;}
+.my-tool-section > .my-tool-body > p{margin-bottom: 0px;}
+.previous-list-panel{margin: 0px; padding: 0px; background: #eee; border: solid 1px #ccc;
+    display: flex; align-items: normal;border-radius: 5px; margin-bottom: 5px;
+}
+.previous-list-panel > i{font-size: 25px; padding: 10px; border-right: solid 1px #ccc;}
+.content-list{font-size: 12px; display: flex; padding: 0px 10px; justify-content: center;
+    flex: 1; flex-direction: column;
+}
+.content-list > p{margin-bottom: 0px; text-align: right; font-weight:600;}
+.right-body-section{margin: 0px; padding:15px; background: rgb(243, 243, 243); border:solid 1px #ddd;}
+/*-------- tabd css end -------*/
+
+/* .export-button{
+  background: none; display: flex;
+  float: right;
+  justify-content: right;padding: 0px 5px;
+} */
+
+.root-container{
+  width:100% !important;
+}
+
+
+

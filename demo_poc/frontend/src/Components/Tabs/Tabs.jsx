@@ -71,7 +71,7 @@ export default function ScrollableTabsButtonAuto(props) {
           aria-label="scrollable auto tabs example"
         >
           <Tab label="Big Basket" {...a11yProps(0)} />
-          <Tab label="Groofers" {...a11yProps(1)} />
+          <Tab label="Grofers" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -79,7 +79,7 @@ export default function ScrollableTabsButtonAuto(props) {
         <Table data={filterData} {...props} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Groofers
+        Grofers
         <Table data={filterData} {...props} />
       </TabPanel>
     </div>
