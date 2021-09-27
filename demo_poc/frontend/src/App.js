@@ -1,57 +1,93 @@
+import React, { useState } from "react";
+import Iframe from "react-iframe";
+import moment from "moment";
+// import styles from "./App.css";
+import "./App.css";
+import { toolsMenuData } from "./Mockdata/index";
+import Dropdown from "./Components/Dropdown/Dropdown";
+import GroceryTab from "./Components/GroceryTab";
+import { Grid, Box } from "@material-ui/core";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { fontSize } from "@mui/system";
+import Appbar from "./Components/Appbar";
 
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import FileUpload from './Components/FileUpload/FileUploadPage';
-// import Card from './Components/Card/Card';
-import Dropdown from './Components/Dropdown/Dropdown';
-import Tabs from './Components/Tabs/Tabs';
+export default function App() {
+  // const [myToolsdata, setMyToolsdata] = useState(toolsMenuData);
+  // const [selectedtool, setSelectedTool] = useState({});
+  // console.log(
+  //   "moment ",
+  //   moment("2021-01-02T07:57:45.121Z").format("DD MMM YYYY"),
+  //   myToolsdata
+  // );
 
-// import App from '../../src/Components/Dropdown/Dropdown';
+  // const onClickTool = (toolID) => {
+  //   const foundTool = myToolsdata?.find((item) => item.id === toolID);
+  //   setSelectedTool(foundTool);
+  //   console.log("foundTool ", foundTool);
+  // };
+  const [isResize, setResize] = useState(false);
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
+  const [selectedItem, setSelectedItem] = useState("");
+  const [cityList, setCityList] = useState([]);
+  const [filtered, setFiltered] = useState(false);
+  const collapse = (value) => {
+    setResize(value);
+  };
 
-export default function FullWidthGrid() {
-  const classes = useStyles();
-
-  const handleSubmit=(country, category, storeName)=>{
-    console.log(country, category, storeName, 'all data');
+  const getUpdated = (val, flag) => {
+    console.log("getUpdated", val);
+    if (flag === "1") setSelectedItem(val);
+    if (flag == "2") {
+      // console.log("UPEN",val)
+      // if (val.data[0].city_list !== undefined) {
+      //   console.log("UPEN AFTER", val.data[0].city_list)
+      //   setCityList(val.data[0].city_list);
+      // }else{
+      //   setCityList([]);
+      // }
+      setFiltered(true)
+      setCityList(val);
     }
+  };
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={6}>
-        <Grid xs={6} sm={3}>
-          <Paper className={classes.paper}>
-              <FileUpload></FileUpload>
-        </Paper>
-        </Grid>
-        <Grid item xs={3} sm={3}>
-          <Paper className={classes.paper}>
-          <Dropdown handleSubmit={handleSubmit}>
+    <div>
+      <Appbar />
+      <Box display="flex" p="10px" className="root-container">
+        {!isResize ? (
+          <Box width="30%" mt="17px" boxShadow="0px 0px 2px 2px #BFBFBF">
+            <Box
+              style={{ background: "#3f51b5", color: "#ffffff", padding: 6 }}
+            >
+              <span style={{ paddingLeft: 10, fontSize: 20 }}>
+                {" "}
+                Filter Item
+              </span>
+              <span style={{ float: "right" }}>
+                <FilterAltIcon />
+              </span>
+            </Box>
+
+            <Dropdown getUpdated={getUpdated} />
+          </Box>
+        ) : null}
+
+        <Box
+          ml="10px"
+          width={isResize ? "100%" : "70%"}
+          mt="17px"
+          boxShadow="0px 0px 2px 2px #BFBFBF"
+        >
+          <GroceryTab
+            cityList={cityList}
+            selectedItem={selectedItem}
+            collapse={collapse}
+            filtered={filtered}
+          />
+           
+        </Box>
          
-          </Dropdown>
-              </Paper>
-        </Grid>
-        <Grid item xs={6} sm={6}>
-          <Paper className={classes.paper}>
-          <Tabs></Tabs>
-          </Paper>
-        </Grid>
-       
-      </Grid>
+      </Box>
     </div>
   );
 }
-
-// export default App;

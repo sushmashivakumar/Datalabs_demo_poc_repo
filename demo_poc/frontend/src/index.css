@@ -12,5 +12,9 @@ code {
     monospace;
 }
 
+.root-container{
+  width:100% !important;
+}
+
 
 
