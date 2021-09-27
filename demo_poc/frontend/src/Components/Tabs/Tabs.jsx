@@ -60,9 +60,9 @@ export default function ScrollableTabsButtonAuto(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="default" style={{backgroundColor:"#3f51b5"}}>
         <Tabs
-          value={value}
+          value={value}      
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
@@ -76,11 +76,11 @@ export default function ScrollableTabsButtonAuto(props) {
       </AppBar>
       <TabPanel value={value} index={0}>
         Big Basket
-        <Table data={filterData} {...props} />
+        {/* <Table data={filterData} {...props} /> */}
       </TabPanel>
       <TabPanel value={value} index={1}>
         Grofers
-        <Table data={filterData} {...props} />
+        {/* <Table data={filterData} {...props} /> */}
       </TabPanel>
     </div>
   );

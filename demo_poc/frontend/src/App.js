@@ -1,264 +1,93 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Iframe from "react-iframe";
+import moment from "moment";
+// import styles from "./App.css";
 import "./App.css";
-import { alpha, makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-
-// import Card from './Components/Card/Card';
+import { toolsMenuData } from "./Mockdata/index";
 import Dropdown from "./Components/Dropdown/Dropdown";
-// import Tabs from "./Components/Tabs/Tabs";
-// import layoutUI from './Components/Layout/layout';
-import Drawer from "@material-ui/core/Drawer";
+import GroceryTab from "./Components/GroceryTab";
+import { Grid, Box } from "@material-ui/core";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { fontSize } from "@mui/system";
+import Appbar from "./Components/Appbar";
 
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import InputBase from "@material-ui/core/InputBase";
-import SearchIcon from "@material-ui/icons/Search";
+export default function App() {
+  // const [myToolsdata, setMyToolsdata] = useState(toolsMenuData);
+  // const [selectedtool, setSelectedTool] = useState({});
+  // console.log(
+  //   "moment ",
+  //   moment("2021-01-02T07:57:45.121Z").format("DD MMM YYYY"),
+  //   myToolsdata
+  // );
 
-import * as FileSaver from "file-saver";
-import * as XLSX from "xlsx";
-import { State, City, CategoryList, CategoryItem, Brand } from "./Mockdata";
-import axios from "axios";
-
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    textAlign: "center",
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "100vh",
-    color: "#000133",
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-  appBar: {
-    background: "#00022E",
-    color: "#fff",
-  },
-  icon: {
-    padding: "10px",
-  },
-  title: {
-    margin: "auto",
-  },
-  container: {
-    display: "flex",
-    flex: 1,
-  },
-  drawer: {
-    background: "#D8DCD6",
-    position: "static",
-    transition: "width .7s",
-  },
-  closed: {
-    width: "0px",
-  },
-  opened: {
-    width: "240px",
-  },
-  main: {
-    flex: 1,
-    background: "#f7f5f5",
-    color: "black",
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
-  },
-  footer: {
-    background: "#00022E",
-    height: "50px",
-    color: "#fff",
-  },
-}));
-
-export default function FullWidthGrid() {
-  const classes = useStyles();
-  const [test, setTest] = useState([])
-
-  // const handleSubmit = (country, category, storeName) => {
-  //   console.log(country, category, storeName, "all data");
+  // const onClickTool = (toolID) => {
+  //   const foundTool = myToolsdata?.find((item) => item.id === toolID);
+  //   setSelectedTool(foundTool);
+  //   console.log("foundTool ", foundTool);
   // };
-  const [isOpened, setIsOpened] = useState(false);
-  const [filterData, setFilterData] = useState({});
-  const handleFilterData = (data) => {
-    axios.post("http://localhost:3000/submit_filter", data).then(
-      (response) => {
-          var result = response.data;
-          console.log(result, "this is result");
-      },
-      (error) => {
-          console.log(error);
-      }
-  );
-    setFilterData(data);
-    console.log(data, "this is filtered data")
+  const [isResize, setResize] = useState(false);
+
+  const [selectedItem, setSelectedItem] = useState("");
+  const [cityList, setCityList] = useState([]);
+  const [filtered, setFiltered] = useState(false);
+  const collapse = (value) => {
+    setResize(value);
   };
 
-
-  const [alldata, setAllData] = useState({});
-  const getAllData = (data) => {
-    setAllData(data);
-  };
-
-  const handleExport = () => {
-    if (Object.keys(alldata).length) {
-      const dataSet1 = [
-        {
-          State: State.find(
-            (state) => state.id.toString() === alldata.state.toString()
-          )?.state,
-          Category: CategoryList.find(
-            (category) => category.id.toString() === alldata.state.toString()
-          )?.categoryName,
-          Item: CategoryItem.find(
-            (item) => item.id.toString() === alldata.state.toString()
-          )?.itemName,
-          City: City.find(
-            (city) => city.id.toString() === alldata.state.toString()
-          )?.city,
-          Brand: Brand.find(
-            (brand) => brand.id.toString() === alldata.state.toString()
-          )?.brand,
-          Price: alldata.price,
-          Discount: alldata.discount,
-          EffectivePrice: alldata.effectiveprice,
-          Verified: alldata.status,
-        },
-      ];
-      const fileType =
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-      const fileExtension = ".xlsx";
-      const ws = XLSX.utils.json_to_sheet(dataSet1);
-      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-      const data = new Blob([excelBuffer], { type: fileType });
-      FileSaver.saveAs(data, "Export" + fileExtension);
+  const getUpdated = (val, flag) => {
+    console.log("getUpdated", val);
+    if (flag === "1") setSelectedItem(val);
+    if (flag == "2") {
+      // console.log("UPEN",val)
+      // if (val.data[0].city_list !== undefined) {
+      //   console.log("UPEN AFTER", val.data[0].city_list)
+      //   setCityList(val.data[0].city_list);
+      // }else{
+      //   setCityList([]);
+      // }
+      setFiltered(true)
+      setCityList(val);
     }
   };
- 
-
 
   return (
+    <div>
+      <Appbar />
+      <Box display="flex" p="10px" className="root-container">
+        {!isResize ? (
+          <Box width="30%" mt="17px" boxShadow="0px 0px 2px 2px #BFBFBF">
+            <Box
+              style={{ background: "#3f51b5", color: "#ffffff", padding: 6 }}
+            >
+              <span style={{ paddingLeft: 10, fontSize: 20 }}>
+                {" "}
+                Filter Item
+              </span>
+              <span style={{ float: "right" }}>
+                <FilterAltIcon />
+              </span>
+            </Box>
 
-    <div className={classes.root}>
-      <AppBar className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={() => setIsOpened(!isOpened)}
-            className={classes.icon}
-          >
-            {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
-          </IconButton>
-          <Typography variant="h6" component={'h6'}className={classes.title}>
-            Datalabs Item POC
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-        </Toolbar>
-      </AppBar>
-      <Toolbar />
-      <div className={classes.container}>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawer, {
-              [classes.closed]: !isOpened,
-              [classes.opened]: isOpened,
-            }),
-          }}
+            <Dropdown getUpdated={getUpdated} />
+          </Box>
+        ) : null}
+
+        <Box
+          ml="10px"
+          width={isResize ? "100%" : "70%"}
+          mt="17px"
+          boxShadow="0px 0px 2px 2px #BFBFBF"
         >
-          Drawer
-        </Drawer>
-        <main className={classes.main}>
-          {/* Item List */}
-          <Grid container spacing={6}>
-            <Grid item xs={3} sm={3}>
-              <Paper className={classes.paper}>
-                
-                <Dropdown handleFilterData={handleFilterData} />
-              </Paper>
-            </Grid>
-            <Grid item xs={9} sm={9}>
-              <Paper className={classes.paper}>
-      
-             
-                {/* <Tabs filterData={filterData} getAllDataEvent={getAllData} /> */}
-
-                <Grid item xs={3} sm={3}>
-                  <button onClick={() => handleExport()}>Export to DB</button>
-                </Grid>
-
-              </Paper>
-            </Grid>
-             {/* <Backend_test></Backend_test> */}
-          </Grid>
-        
-        </main>
-      </div>
-   
-      <div className={classes.footer}>
-        <Typography variant="h6" component={'h6'}>Footer</Typography>
-      </div>
+          <GroceryTab
+            cityList={cityList}
+            selectedItem={selectedItem}
+            collapse={collapse}
+            filtered={filtered}
+          />
+           
+        </Box>
+         
+      </Box>
     </div>
   );
 }
-
-// export default App;
